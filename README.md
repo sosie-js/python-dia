@@ -10,15 +10,20 @@ A library for producing and manipulating
 ## Installation
 
 Either can be done
--from pip
+
+-from pip (complicated with dia) 
 ```sh
-sudo pip3 install pythondia
+sudo pip3 install pythondia==0.7.0
+cd ~/.dia/python
+unzip /usr/local/lib/python3.9/site-packages/pythondia-0.7.0-py3.9.egg 
+wget  https://raw.githubusercontent.com/sosie-js/python-dia/main/tests/diapython.py
 ```
--from github:
+-from github (more straight forward = RECOMMENDED):
+
 ```sh
-git clone https://github.com/sosie-js/python-dia
-cd python-dia
-sudo python3 setup.py install
+cd ~/.dia/python
+git clone https://github.com/sosie-js/python-dia pythondia
+cp tests/diapython.py .
 ```
 
 ## Documents
