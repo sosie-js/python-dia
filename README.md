@@ -23,7 +23,7 @@ wget  https://raw.githubusercontent.com/sosie-js/python-dia/main/tests/diapython
 ```sh
 cd ~/.dia/python
 git clone https://github.com/sosie-js/python-dia pythondia
-cp tests/diapython.py .
+cp pythondia/tests/diapython.py .
 ```
 
 ## Documents
