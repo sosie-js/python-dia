@@ -5,7 +5,7 @@ A library for producing and manipulating
 
 ## Demo
 
-![Demo live](pythondia_demo.gif)
+![Demo live](https://raw.githubusercontent.com/sosie-js/python-dia/main/pythondia_demo.gif)
 
 ## Installation
 
