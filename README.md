@@ -64,7 +64,7 @@ PYTHON="/usr/bin/python3.9" ./configure --prefix=/usr --with-python --with-swig 
 ```
 b) Fix errors
 
->> Provocates Error
+>> too old Error
 ```
 checking if Python version >= 2.3.0... configure: error: too old
 ```
@@ -98,7 +98,7 @@ else:
 ```
 
 
->> Provocates configure script broken
+>> python script broken due to old python2 style
 ```
 checking if Python version >= 2.3.0... okay
 checking local Python configuration...   File "<string>", line 1
@@ -114,7 +114,7 @@ BY
  PYTHON_VERSION=`$PYTHON -c "import sys; print(sys.version[:3])"`
 ```
 
->> Provocates configure script broken
+>> python script broken due to old python2 style (again)
 ```
    SyntaxError:  invalid syntax
   File "<string>", line 1
