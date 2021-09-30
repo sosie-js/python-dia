@@ -133,7 +133,7 @@ FIX
 BY
 ```
   PYTHON_PLATFORM=`$PYTHON -c "import sys; print(sys.platform)"`
-```                     ^
+```
 
 e) compil
  ```sh
