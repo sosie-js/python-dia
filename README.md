@@ -55,7 +55,7 @@ x11proto-xext-dev x11proto-xinerama-dev xtrans-dev zlib1g-dev libart-2.0-dev
 sudo apt-get install libxslt1-dev
 
 #Clone the git repository, for example:
-#git clone git://git.gnome.org/dia --> does not exist anymore
+#git clone https://gitlab.gnome.org/GNOME/dia.git
 #git clone https://github.com/GNOME/dia
 #or use debian way (recommended):
 apt-get source dia
@@ -165,7 +165,18 @@ cd build &&meson --prefix=/usr --buildtype=release .. && ninja
 #move files from network into Nework and remove network, it 
 
 
-2) Then pythondia installation can be done either
+2) Then pythondia installation can be done either 
+
+in your  user directory (for us ~/.dia/python that can be determined with the script)...
+
+```sh
+echo "import os
+if 'HOME' not in os.environ:
+  os.environ['HOME'] = os.pathsep + 'tmp'
+# import all plugins found in user plugin dir
+print(os.path.join(os.environ['HOME'], '.dia', 'python'))" > home.py
+python3 home.py
+```
 
 a) from pip (complicated with dia) 
 
