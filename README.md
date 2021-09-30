@@ -52,8 +52,8 @@ sudo apt-get install libxslt1-dev
 #Clone the git repository, for example:
 #git clone git://git.gnome.org/dia --> does not exist anymore
 #git clone https://github.com/GNOME/dia
-#or use debian way:
-#apt-get source dia
+#or use debian way (recommended):
+apt-get source dia
 
 #Enter the dia directory and start the build process using the following commands:
 
