@@ -3,14 +3,19 @@
 A library for producing and manipulating
 [Dia diagrams](http://dia-installer.de/) files.
 
+## Motivations
+
+I am not the [only one that need to produce diagrams without Gui](https://gitlab.gnome.org/GNOME/dia/-/issues/492), much more faster.
+
 ## Demo
 
 ![Demo live](https://raw.githubusercontent.com/sosie-js/python-dia/main/pythondia_demo.gif)
 
 ## Installation
 
-1) Prerequisite is Dia with python3 compiled. By default is with 2.7 so you will have to upgrade dia
-I have to compile dia from source on my side. on debian based,
+1) Prerequisite is Dia with python3 compiled. By default is with python static 2.7 so you will have to upgrade dia
+I have to compile dia from source on my side. on debian based. Note we are in manual mode as
+pip3 installations will not been seen by dia so we need extra steps like in 2a.
 
 a) Install depencies
 
@@ -154,9 +159,9 @@ cd build &&meson --prefix=/usr --buildtype=release .. && ninja
 #move files from network into Nework and remove network, it 
 
 
-2) Then pythondia installation can be done
+2) Then pythondia installation can be done either
 
--from pip (complicated with dia) 
+a) from pip (complicated with dia) 
 
 python3 --version gives ; Python 3.x.y , replace x with your numer in the following script:
 
@@ -166,7 +171,7 @@ cd ~/.dia/python
 cp /usr/local/lib/python3.x/site-packages/pythondia-0.7.1-py3.x.egg/* .
 rm -r EGG-INFO
 ```
--from github (more straight forward = RECOMMENDED):
+b) from github (more straight forward = RECOMMENDED):
 
 ```sh
 cd ~/.dia/python
