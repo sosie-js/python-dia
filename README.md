@@ -53,10 +53,13 @@ x11proto-xext-dev x11proto-xinerama-dev xtrans-dev zlib1g-dev libart-2.0-dev
 # follow steps at https://www.linuxfromscratch.org/blfs/view/svn/x/graphene.html
 
 sudo apt-get install libxslt1-dev
+```
 
-#Clone the git repository, for example:
-#git clone https://gitlab.gnome.org/GNOME/dia.git
-#git clone https://github.com/GNOME/dia
+Choose source method
+
+a) Debian way
+
+```
 #or use debian way (recommended):
 apt-get source dia
 
@@ -66,8 +69,9 @@ cd dia-0.97.3+git20160930
 
 ./autogen.sh
 PYTHON="/usr/bin/python3.9" ./configure --prefix=/usr --with-python --with-swig --with-libart
+
+# Fix errors
 ```
-b) Fix errors
 
 >> too old Error
 ```
@@ -152,12 +156,22 @@ make install
 
 ==>get rid of pdf buggy plugin
 
+b) new way with meson
+
+Clone the git repository, for example:
+
+ ```sh
+git clone https://gitlab.gnome.org/GNOME/dia.git
+#or git clone https://github.com/GNOME/dia
+ ```
+configure meson
+
  ```sh
 meson setup --wipe build --prefix=/usr --buildtype=release 
 #Desactive the buggy pdf, by editing plug-ins/meson.build 
 #  and comment the line pdf to have #subdir('pdf')
 meson setup  build --reconfigure -Dwith-python=yes
-cd build &&meson --prefix=/usr --buildtype=release .. && ninja
+cd build &&meson --prefix=/usr --buildtype=release .. && ninja && ninja install
 ```
 
 ==> Solve networ/network redundancy error: 
