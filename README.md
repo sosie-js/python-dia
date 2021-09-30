@@ -174,8 +174,8 @@ python3 --version gives ; Python 3.x.y , replace x with your numer in the follow
 ```sh
 sudo pip3 install pythondia==0.7.1
 cd ~/.dia/python
-cp /usr/local/lib/python3.x/site-packages/pythondia-0.7.1-py3.x.egg/* .
-rm -r EGG-INFO
+cp -r /usr/local/lib/python3.x/site-packages/pythondia-0.7.1-py3.x.egg/pythondia .
+cp /usr/local/lib/python3.x/site-packages/pythondia-0.7.1-py3.x.egg/pythondia/tests/diapython.py .
 ```
 b) from github (more straight forward = RECOMMENDED):
 
