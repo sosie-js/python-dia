@@ -65,9 +65,12 @@ PYTHON="/usr/bin/python3.9" ./configure --prefix=/usr --with-python --with-swig 
 b) Fix errors
 
 >> Provocates Error
+```
 checking if Python version >= 2.3.0... configure: error: too old
+```
 
-<< REPLACE in configure
+REPLACE in configure
+```
         prog="
 import sys, string
 minver = '2.3.0'
@@ -83,34 +86,49 @@ if pyver >= minver:
         sys.exit(0)
 else:
         sys.exit(1)"
-
->> BY
+```
+BY
+```
  prog="
 import sys, string
 if sys.version_info >=(2,3,0): 
         sys.exit(0)
 else:
         sys.exit(1)"
+```
 
-==>> Provocates configure script broken
+
+>> Provocates configure script broken
+```
 checking if Python version >= 2.3.0... okay
 checking local Python configuration...   File "<string>", line 1
     import sys; print sys.version[:3]
-                      ^
-<< FIX 
-  PYTHON_VERSION=`$PYTHON -c "import sys; print sys.version[:3]"`
->> BY
- PYTHON_VERSION=`$PYTHON -c "import sys; print(sys.version[:3])"`
+```
 
-==>> Provocates SyntaxError: invalid syntax
+FIX 
+```
+  PYTHON_VERSION=`$PYTHON -c "import sys; print sys.version[:3]"`
+```
+BY
+```
+ PYTHON_VERSION=`$PYTHON -c "import sys; print(sys.version[:3])"`
+```
+
+>> Provocates configure script broken
+```
+   SyntaxError:  invalid syntax
   File "<string>", line 1
     import sys; print sys.platform
+```
 
-<< FIX 
+FIX 
+```
   PYTHON_PLATFORM=`$PYTHON -c "import sys; print sys.platform"`
->> BY
+```
+BY
+```
   PYTHON_PLATFORM=`$PYTHON -c "import sys; print(sys.platform)"`
-                      ^
+```                     ^
 
 e) compil
  ```sh
