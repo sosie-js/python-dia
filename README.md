@@ -127,19 +127,25 @@ BY
 ```
 
 FIX 
+
 ```
   PYTHON_PLATFORM=`$PYTHON -c "import sys; print sys.platform"`
 ```
+
 BY
+
 ```
   PYTHON_PLATFORM=`$PYTHON -c "import sys; print(sys.platform)"`
 ```
 
 e) compil
+
  ```sh
 make
 ```
+
 To install, run the following command:
+
 ```sh
 make install
 ```
