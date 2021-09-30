@@ -8,7 +8,7 @@ requirements = [ "setuptools", "jsonpickle"," logging"]  # This could be retriev
 
 setup(
     name="pythondia",
-    version="0.7.0",
+    version="0.7.1",
     description="Python dia helpers to generate diagrams in dia from python",
     long_description=long_description,
     long_description_content_type="text/markdown",
