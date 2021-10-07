@@ -11,6 +11,9 @@ I am not the [only one that need to produce diagrams without Gui](https://gitlab
 
 ![Demo live](https://raw.githubusercontent.com/sosie-js/python-dia/main/pythondia_demo.gif)
 
+**BIG NEWS**: [Dia Connect support](https://github.com/sosie-js/python-dia/commit/6457f76438bf25b287ccdc18cd9f4c6726c4d282)
+allowing to control dia from outside!
+
 ## Installation
 
 1) Prerequisite is Dia with python3 compiled. By default is with python static 2.7 so you will have to upgrade dia
