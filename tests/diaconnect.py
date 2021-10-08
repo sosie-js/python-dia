@@ -1,7 +1,24 @@
 # Copyright 2021 SoSie - sos-productions.com
 #
-#   diaconnect.py ..  make dia awesome with python from outside (V2 - Uggly refresh hack)
-#   
+#   diaconnect.py ..  make dia awesome with python from outside 
+#
+# History:
+#  V0 (29.09.2021) Relases of pythondia started on pypi: https://pypi.org/project/pythondia/#history 
+#       and I drop a beegees joke (I removed) just after introducing pythondia 
+#       on gitlab:  https://gitlab.gnome.org/GNOME/dia/-/issues/492
+#  V0.1 (04.10.2021) - Stuck with sandboxing on IRC having submitted a gist previously
+#       https://gist.github.com/sosie-js/e068f9fbb098b32843bf07fff36bb6e6 no real answer or reaction 
+#       I concluded: http://sosie.sos-productions.com/share/No_way_to_get_current_diagram_from_outiside_action_callback.jpg
+#  V0.2 (06.10.2021) - First beta, circonventing partially the sandbox with a uggly refresh hack and autostart 
+#       server triggered in a gobject.add_timeout 
+#  V0.3 (07.10.2021) - Code cleanup, history added.
+#
+# Note:
+# This powertoy is part of pythondia devel (branch diaconnect), its goal is mainly to make revive dia after 
+# so many years; it is also my contribution to this wonderfull diagram program that need more interactivity 
+# and diagram script generation feature, feature i started with pythondia
+#  last version will be here: https://github.com/sosie-js/python-dia/blob/diaconnect/tests/diaconnect.py
+#
 # Warning: 
 #  this version is *beta*, with no warranty and security so don't use it for production unless you know the risks
 #  of telnet without pasword
@@ -25,6 +42,7 @@
 # - sign petition endccp.com to help people of china , hk and the world to end this biological attack from Wuhan. 
 #   the journalist Jean Robin explained with proofs on his website https://nouvellefrancelibre.com/in-english/.
 #
+# License:
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -42,9 +60,10 @@
 def dia_run_pythondia(data, flags):
     """ will hold the python script wrapped for dia connect , I don't know how to make this dynamic, live edit unless convert all commands to CSV all load the CSV file.."""
 
+    #from pudb import set_trace; set_trace(paused=True)
+    #import web_pdb; web_pdb.set_trace()
+ 
     import _once
-    layer = data.active_layer
-    
     import pythondia
     
     #==== SoS extension ====
@@ -59,128 +78,125 @@ def dia_run_pythondia(data, flags):
     # Should be the last
     from pythondia.ObjectHelpers import DIA_CSV_parser
     
+    #========== PUT YOUR PYDIA SCRIPT HERE ===========
+    
+    
+    dia=_once.imported['dia']
+    otypes=dia.registered_types() 
     #display = dia.active_display() returns None, so we have to rely on our backuped diagram
     diagram=_once.diagram
+    data= diagram.data
+    layer = data.active_layer
     
-    #from pudb import set_trace; set_trace(paused=True)
-    #import web_pdb; web_pdb.set_trace()
-    if(diagram):
-        
-        #========== PUT YOUR PYDIA SCRIPT HERE ===========
-        
-        otypes=dia.registered_types() 
-        print(otypes) #BUG1: Shows only AADL Sheet ! Others like UML are not present
-        
-        errors=[]
-        
-        #Case 1 : Non Wrapped Objectypes in a class_
-        #------------------------------------------------------------------
-        error, dot=DiaObjectFactoryHelper("UML - Note", name="MyNote",cx=15,cy=0)
-        if error  :
-            errors.append(error)
-        else :
-            #---- Customize you dia object here:
-            dot.set_property("text","Created with pythondia!")
-            #------
-            dot.dump_properties()
-            dot.add_to_layer(layer)
-        
-        #Case 2 ; Here are some wrapped Dia Objectypes in class
-        #--------------------------------------------------------------------------------
-         
-        db=DIA_Database_Table("Stars2",cx=10,cy=10)
-        db.add_attribute("MI-6","secretAgent","JB007","License To Kill",1,0,0) 
-        db.add_attribute("Office","Inspector","Columbo","License To Investigate",0,1,0) 
-        db.dump_properties()
-        db.add_to_layer(layer)
-            
-        ud=DIA_UML_Class("PyDiaMe", cx=20,cy=10)
-        ud.add_template("asterix", "le gaulois")
-        ud.add_attribute("game",type="string",value="sizigi",comment="",visibility=0,abstract=0,class_scope=0)
-        operation=ud.add_operation("work", "result", comment='', stereotype='', visibility=0, inheritance_type=2, query=0,class_scope=0, params=())
-        operation.add_param('time', type="minutes", value="180", comment="Professional work", pindir=0)
-        ud.dump_properties()
-        ud.add_to_layer(layer)
-            
-        #Case 3 : CSV
-        #------------------
-        
-        Database_Table="""
-        Database - Table;(10,20);Database;;DiaObject of type "Database - Table"
-        Database - Table;obj_pos;point;(14.4,10.45);
-        Database - Table;obj_bb;rect;((14.4,10.45),(20.32,21.5));
-        Database - Table;meta;dict;{'url': 'm_url', 'id': 'm_id', 'modification': 'm_modification', 'creation': 'm_creation', 'author': 'm_author'};
-        Database - Table;elem_corner;point;(14.4,10.45);
-        Database - Table;elem_width;real;5.92;
-        Database - Table;elem_height;real;11.05;
-        Database - Table;name;string;c_name;
-        Database - Table;comment;string;c_desc;
-        Database - Table;visible_comment;bool;1;
-        Database - Table;underline_primary_key;bool;1;
-        Database - Table;tagging_comment;bool;0;
-        Database - Table;bold_primary_keys;bool;0;
-        Database - Table;attributes;darray;(('a_name', 'a_type', 'a_desc', 0, 0, 0, '(NULL)'), ('', '(NULL)', 'primary', 1, 0, 0, '(NULL)'), ('(NULL)', '(NULL)', 'nullable', 0, 1, 0, '(NULL)'), ('(NULL)', '(NULL)', 'unique', 0, 0, 1, '(NULL)'), ('(NULL)', '(NULL)', 'default', 0, 0, 0, 'a_value'));
-        Database - Table;normal_font;font;monospace normal normal;
-        Database - Table;name_font;font;sans 700 normal;
-        Database - Table;comment_font;font;sans normal italic;
-        Database - Table;normal_font_height;real;0.8;
-        Database - Table;name_font_height;real;0.7;
-        Database - Table;comment_font_height;real;0.7;
-        Database - Table;text_colour;colour;(0.0,0.0,0,0,1,0);
-        Database - Table;line_colour;colour;(0.0,0.0,0.0,1.0);
-        Database - Table;fill_colour;colour;(1.0,1.0,1.0,1.0);
-        Database - Table;line_width;length;0.1;
-        """
-        ud=DIA_CSV_parser("UML - Class").parse_data(Database_Table)
-        ud.dump_properties()
-        ud.add_to_layer(layer)
-        
-        ud=DIA_CSV_parser("Database - Table").parse_data(Database_Table)
-        ud.move(2.5,25)
-        ud.dump_properties()
-        ud.add_to_layer(layer)
-        
-        #========================================
-        
-        if(len(errors) > 0):
-            print("Errors encountered:\n"+"\n".join(errors)) # BUG1 leads to Unsupported Dia Package 'UML"
-        else:
+    #print(otypes)
+    
+    errors=[]
+    
+    #Case 1 : Non Wrapped Objectypes in a class_
+    #------------------------------------------------------------------
+    error, dot=DiaObjectFactoryHelper("UML - Note", name="MyNote",cx=15,cy=0)
+    if error  :
+        errors.append(error)
+    else :
+        #---- Customize you dia object here:
+        dot.set_property("text","Created with pythondia and propulsed with diaconnect!")
+        #------
+        dot.dump_properties()
+        dot.add_to_layer(layer)
+    
+    #Case 2 ; Here are some wrapped Dia Objectypes in class
+    #--------------------------------------------------------------------------------
      
-            """
-            if diagram :
-                diagram.display()
-                diagram.flush()
-                print("FLUSH")
-                print(str(dia))
-                print(str(d))
-                #display_refresh(dia)
-            """
-            # NOTE: Extracted from the Blink example in Dia Mailing list May 2009 
-            #found by chance thanks to DocFetcher tool..using 'script' keyword
-            # I don't know if we need this...display_refresh() may be called simply directly
-            from gi.repository import GObject as gobject
-            gobject.timeout_add(500, display_refresh)
-            
-            target=str(diagram.data)
-            #NOT CHANGING the target is crashing DIA, target=target.replace(".dia","_foo.dia")
-            print("saving diagram into '"+ target+"'")
-            diagram.save ( target)
-            
-            #THIS REALLY SUCKS AND DO NOTHING!
-            #dia.load(target)
-            #dia.update_all()
-            #WE HAVE TO USE THE MACGYVER MODE
-            import subprocess
-            p=subprocess.Popen(["dia", target])
-            print(p.pid)
-            #dia.flush()
-            #animator.start()
+    db=DIA_Database_Table("Stars2",cx=10,cy=10)
+    db.add_attribute("MI-6","secretAgent","JB007","License To Kill",1,0,0) 
+    db.add_attribute("Office","Inspector","Columbo","License To Investigate",0,1,0) 
+    db.dump_properties()
+    db.add_to_layer(layer)
+        
+    ud=DIA_UML_Class("PyDiaMe", cx=20,cy=10)
+    ud.add_template("asterix", "le gaulois")
+    ud.add_attribute("game",type="string",value="sizigi",comment="",visibility=0,abstract=0,class_scope=0)
+    operation=ud.add_operation("work", "result", comment='', stereotype='', visibility=0, inheritance_type=2, query=0,class_scope=0, params=())
+    operation.add_param('time', type="minutes", value="180", comment="Professional work", pindir=0)
+    ud.dump_properties()
+    ud.add_to_layer(layer)
+        
+    #Case 3 : CSV
+    #------------------
+    
+    Database_Table="""
+    Database - Table;(10,20);Database;;DiaObject of type "Database - Table"
+    Database - Table;obj_pos;point;(14.4,10.45);
+    Database - Table;obj_bb;rect;((14.4,10.45),(20.32,21.5));
+    Database - Table;meta;dict;{'url': 'm_url', 'id': 'm_id', 'modification': 'm_modification', 'creation': 'm_creation', 'author': 'm_author'};
+    Database - Table;elem_corner;point;(14.4,10.45);
+    Database - Table;elem_width;real;5.92;
+    Database - Table;elem_height;real;11.05;
+    Database - Table;name;string;c_name;
+    Database - Table;comment;string;c_desc;
+    Database - Table;visible_comment;bool;1;
+    Database - Table;underline_primary_key;bool;1;
+    Database - Table;tagging_comment;bool;0;
+    Database - Table;bold_primary_keys;bool;0;
+    Database - Table;attributes;darray;(('a_name', 'a_type', 'a_desc', 0, 0, 0, '(NULL)'), ('', '(NULL)', 'primary', 1, 0, 0, '(NULL)'), ('(NULL)', '(NULL)', 'nullable', 0, 1, 0, '(NULL)'), ('(NULL)', '(NULL)', 'unique', 0, 0, 1, '(NULL)'), ('(NULL)', '(NULL)', 'default', 0, 0, 0, 'a_value'));
+    Database - Table;normal_font;font;monospace normal normal;
+    Database - Table;name_font;font;sans 700 normal;
+    Database - Table;comment_font;font;sans normal italic;
+    Database - Table;normal_font_height;real;0.8;
+    Database - Table;name_font_height;real;0.7;
+    Database - Table;comment_font_height;real;0.7;
+    Database - Table;text_colour;colour;(0.0,0.0,0,0,1,0);
+    Database - Table;line_colour;colour;(0.0,0.0,0.0,1.0);
+    Database - Table;fill_colour;colour;(1.0,1.0,1.0,1.0);
+    Database - Table;line_width;length;0.1;
+    """
+    ud=DIA_CSV_parser("UML - Class").parse_data(Database_Table)
+    ud.dump_properties()
+    ud.add_to_layer(layer)
+    
+    ud=DIA_CSV_parser("Database - Table").parse_data(Database_Table)
+    ud.move(2.5,25)
+    ud.dump_properties()
+    ud.add_to_layer(layer)
+    
+    #========================================
+    
+    if(len(errors) > 0):
+        print("Errors encountered:\n"+"\n".join(errors)) # BUG1 leads to Unsupported Dia Package 'UML"
     else:
-        print("Diaconnect requires first you click on the entry 'diaconnect' from Debug menu of dia")
-    #return data
+ 
+        """
+        if diagram :
+            diagram.display()
+            diagram.flush()
+            print("FLUSH")
+            print(str(dia))
+            print(str(d))
+            #display_refresh(dia)
+        """
+        # NOTE: Extracted from the Blink example in Dia Mailing list May 2009 
+        #found by chance thanks to DocFetcher tool..using 'script' keyword
+        # I don't know if we need this...display_refresh() may be called simply directly
+        from gi.repository import GObject as gobject
+        gobject.timeout_add(500, display_refresh)
+        
+        target=str(diagram.data)
+        #NOT CHANGING the target is crashing DIA, target=target.replace(".dia","_foo.dia")
+        print("saving diagram into '"+ target+"'")
+        diagram.save ( target)
+        
+        #THIS REALLY SUCKS AND DO NOTHING!
+        #dia.load(target)
+        #dia.update_all()
+        #WE HAVE TO USE THE MACGYVER MODE
+        import subprocess
+        p=subprocess.Popen(["dia", target])
+        print(p.pid)
+        #dia.flush()
+        #animator.start()
 
 def handle_client(sock): 
-    """ handles commands of Dia connect server, please adjust ot your needs it's free """
+    """ handles commands of Dia connect server, please adjust ot your needs it's a free self-service """
  
     #timer = RepeatTimer(5, beegees, "Oh oh oh staying alive...")
     #timer.start()             
@@ -211,7 +227,7 @@ def handle_client(sock):
 
 
 #######################################################################
-###   DIA CONNECT  FOR THE UGLY DIA THAT DOES NOT WANT TO REFRESH SCREEN AND SANDBOXED LIKE HELL ###
+###   DIA CONNECT  FOR THE UGLY DIA THAT DOES NOT WANT TO REFRESH SCREEN AND IS SANDBOXED LIKE HELL ###
 #######################################################################
 
 import inspect
@@ -223,7 +239,7 @@ def onDiaLaunched():
 
 if __name__ == '__main__' or not onDiaLaunched():
 
-    print("Nothingto do, copy this script in ~/.dia/python , then open dia with : dia&&source finish_tour.sh")
+    print("Nothing to do, copy this script in ~/.dia/python , then open dia with : dia&&source finish_tour.sh")
 
 else:
     
@@ -363,7 +379,7 @@ else:
             globals()["_diagram"]=diagram
             _once.diagram=diagram
             _once.imported['dia']=dia
-            #dia.message(2,"Diaconnect is ready now, pass your commands through telnet localhost 127.0.0.1 33333:")
+            #dia.message(2,"Diaconnect is ready now, pass your commands through telnet localhost 127.0.0.1 33333")
             #try:
             #   import gobject
             #except importError as e:
