@@ -1,9 +1,13 @@
 # Copyright 2021 SoSie - sos-productions.com
 #
-#   hello_gtkbuilder.py ..  experinenting timer and gui with hello world sample both inside and outside dia
+#   diagtkbuilder.py ..  experinenting timer and gui with hello world sample both inside and outside dia
 #
-# Requires hello_gtkbuilder-from-glade3.8.0-gtk2.24.glade.
-# (use Glade 3.8.0 and export to gtkbuilder to customize your gui).
+# Requires diagtkbuilder.glade
+# (use Glade 3.8.0 and export to gtkbuilder format to customize your gui):
+"""
+
+"""
+# for info, diagtkbuilder3.glade:
 """
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
@@ -147,8 +151,8 @@ def autolaunch_server(data, flags):
         # gtk-builder-convert project1.glade project1_gtkbuikder.glade
         # as mentioned in https://lists.debian.org/debian-gtk-gnome/2012/02/msg00003.html
         builder = gtk.Builder()
-        builder.add_from_file('hello_gtkbuilder-from-glade3.8.0-gtk2.24.glade')
-        #builder.add_from_file('hello_gtkbuilder-from-glade3.22.1-gtk3.20.glade')
+        builder.add_from_file('diagtkbuilder.glade') #from-glade3.8.0 , gtk+2.0 compatible
+        #builder.add_from_file('diagtkbuilder3.glade') #from glade 3.22.1 , gtk3.0 compatible
          
         #window = xml.get_widget('window1')
         window = builder.get_object("window1")
