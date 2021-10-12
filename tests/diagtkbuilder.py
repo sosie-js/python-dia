@@ -5,14 +5,30 @@
 # Requires diagtkbuilder.glade
 # (use Glade 3.8.0 and export to gtkbuilder format to customize your gui):
 """
-
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="2.24"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkButton" id="button1">
+        <property name="label" translatable="yes">button</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_action_appearance">False</property>
+      </object>
+    </child>
+  </object>
+</interface>
 """
-# for info, diagtkbuilder3.glade:
+# for info, diagtkbuilder3.glade is quite similar:
 """
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="2.24"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <child>
