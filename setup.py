@@ -8,12 +8,12 @@ requirements = [ "setuptools", "jsonpickle"," logging"]  # This could be retriev
 
 setup(
     name="pythondia",
-    version="0.7.1",
+    version="1.0.0",
     description="Python dia helpers to generate diagrams in dia from python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="Sosie",
-    # author_email="sosie@sos-productions.com",
+    author="Olivier Lutzwiller",
+    author_email="sosie@sos-productions.com",
     keywords="dia python diagram helper",
     url="http://github.com/sosie-js/python-dia",
     license='GPL',
