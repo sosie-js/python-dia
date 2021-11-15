@@ -7,15 +7,14 @@ Luck was Chris Daley provided with his dia-test mock project which was a complem
 
 ## History
 
-- v1.0  Original version of dia-test from Chris 
+- v1.0  Original version of [dia-test](https://github.com/chebizarro/dia-test) from Chris Daley
 
-- v1.1. Chris version dia-test was not fully python3 compatible so I fixed it.
+- v1.1 (14.10.21). Chris version dia-test was not fully python3 compatible [so I fixed it at this time](https://github.com/sosie-js/python-dia-mock-plugin/commits/pythondia/dia).
 
-- v1.2 First version with mock sample and dumpObj . 
+- v1.2 (03.11.21) [First release with mock sample and dumpObj](https://github.com/sosie-js/python-dia-mock-plugin/releases/tag/v1.2) . 
 Limitations: it can not create dia objects and dia.py is still monolitic
 
-- v1.3 Add documentation website for pyhton-dia and this page to integrate this as the mock plugin for python dia 2.0 , 
-so I changed the origin of the repos to here and mocked dia.register_action with "About DiaMock" 
+- v1.3 Add documentation website for python-dia 1.0.0 and this page to integrate this as the mock plugin for python dia 2.0 (comming very soon), so I changed the origin of the repos to here and mocked dia.register_action with "About DiaMock" 
 
 
 ## Installation 
@@ -51,19 +50,19 @@ they are simply calling python on setup.py to install it.
 
 ## Usage
 
-1. copy the sample diamock.py into your dia user python dir 
+1. copy the sample `test/diamock.py` into your dia user python dir `$HOME/.dia/python`
 
 2. trigger it!
 
-either from 'dia#1' or 'dia#2' like described in the homepage of python-dia.
+either from `dia#1` or `dia#2` like described in [the homepage of python-dia](https://sosie-js.github.io/python-dia).
 and watch the result in the shell console. 
 
 OR
 
 use Scite to trigger diamock.py
 
-for this is updated 'python.properties' 
-accessible from Menu Options > Edit Properties >  Open python.properties
+for this is updated `python.properties`
+accessible from Menu `Options > Edit Properties >  Open python.properties`
 by adding the command.name.2. entries and defaulting to python2.7
 
 ```
