@@ -20,15 +20,29 @@ so I changed the origin of the repos to here and mocked dia.register_action with
 
 ## Installation 
 
-1 - Get the mock Plugin from github
+1 - Grab python-dia first
 
 ```sh
- git clone https://github.com/sosie-js/python-dia-mock-plugin) 
+ git clone https://github.com/sosie-js/python-dia
 ```
 
-2 - Simply use my helper scripts 
+2 - Create the plug-ins dir if none
 
 ```sh
+cd python-dia/python-dia
+mkdir plug-ins
+```
+
+3 - Get the mock Plugin from github
+
+```sh
+ git clone https://github.com/sosie-js/python-dia-mock-plugin mock
+```
+
+4 - Simply use my helper scripts to install
+
+```sh
+cd mock
 source install_python2.sh
 source install_python3.sh
 ```
