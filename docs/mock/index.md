@@ -55,7 +55,7 @@ they are simply calling python on setup.py to install it.
 2. trigger it!
 
 either bu running `dia#1` or `dia#2` like described in [the homepage of python-dia](https://sosie-js.github.io/python-dia).
-and watch the result in the shell console. 
+and watch the result in the shell console after clicking on  "About DiaMock" in the help menu
 
 *OR*
 
@@ -101,7 +101,8 @@ python2.7 diamock.py
 python3.9 diamock.py
 ```
 
-3. watch the result in the console. 
+An about dialog should pop up, have a look to the credits click close and close
+and watch the result in the console and if dia 
 
 ## Contributing
 
