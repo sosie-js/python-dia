@@ -102,7 +102,7 @@ python3.9 diamock.py
 ```
 
 An about dialog should pop up, have a look to the credits click close and close
-and watch the result in the console and if dia 
+and watch the result in the console.
 
 ## Contributing
 
