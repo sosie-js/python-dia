@@ -14,31 +14,31 @@ Luck was Chris Daley provided with his dia-test mock project which was a complem
 - v1.2 (03.11.21) [First release with mock sample and dumpObj](https://github.com/sosie-js/python-dia-mock-plugin/releases/tag/v1.2) . 
 Limitations: it can not create dia objects and dia.py is still monolitic
 
-- v1.3 (15.11.21) Add documentation website for python-dia 1.0.0 and this page to integrate this as the mock plugin for python dia 2.0 (comming very soon), so I changed the origin of the repos to here and mocked dia.register_action with "About DiaMock" 
+- v1.3 (15.11.21) Add documentation website for python-dia 1.0.0 and this page to integrate this as the mock plugin for python dia 2.0 (coming very soon), so I changed the origin of the repos to here and mocked dia.register_action with "About DiaMock" 
 
 
 ## Installation 
 
-1 - Grab python-dia first
+1. Grab python-dia first
 
 ```sh
  git clone https://github.com/sosie-js/python-dia
 ```
 
-2 - Create the plug-ins dir if none
+2. Create the plug-ins dir if none
 
 ```sh
 cd python-dia/python-dia
 mkdir plug-ins
 ```
 
-3 - Get the mock Plugin from github
+3. Get the mock Plugin from github
 
 ```sh
  git clone https://github.com/sosie-js/python-dia-mock-plugin mock
 ```
 
-4 - Simply use my helper scripts to install
+4. Simply use my helper scripts to install
 
 ```sh
 cd mock
@@ -50,22 +50,22 @@ they are simply calling python on setup.py to install it.
 
 ## Usage
 
-1. copy the sample `test/diamock.py` into your dia user python dir `$HOME/.dia/python`
+1. copy the sample `test/diamock.py` and `test/dumpObj.py` into your dia user python dir `$HOME/.dia/python`
 
 2. trigger it!
 
-either from `dia#1` or `dia#2` like described in [the homepage of python-dia](https://sosie-js.github.io/python-dia).
+either bu running `dia#1` or `dia#2` like described in [the homepage of python-dia](https://sosie-js.github.io/python-dia).
 and watch the result in the shell console. 
 
-OR
+*OR*
 
 use Scite to trigger diamock.py
 
-for this is updated `python.properties`
+with this is updated `python.properties`
 accessible from Menu `Options > Edit Properties >  Open python.properties`
 by adding the command.name.2. entries and defaulting to python2.7
 
-```
+```python
 if PLAT_WIN
 	command.go.*.py=pythonw -u "$(FileNameExt)"
 	command.go.subsystem.*.py=1
@@ -91,7 +91,17 @@ command.name.2.$(file.patterns.py)=Python3
 command.2.$(file.patterns.py)=python3.9 -u  "$(FileNameExt)"
 ```
 
-and watch the result in the console. 
+*OR*
+
+run from terminal directly
+
+```sh
+cd test
+python2.7 diamock.py
+python3.9 diamock.py
+```
+
+3. watch the result in the console. 
 
 ## Contributing
 
