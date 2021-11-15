@@ -62,7 +62,7 @@ and voilà, that's all folks!
 
 ## Plugins
 
-- [Mock](https://sosie-js.github.io/python-dia/mock) simulate dia core without dia..to avoid
+- [Mock](https://sosie-js.github.io/python-dia/mock) simulates dia core without dia..to avoid
 op/close dia each time you change your python code to see the results.
 
 
