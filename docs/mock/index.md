@@ -14,7 +14,7 @@ Luck was Chris Daley provided with his dia-test mock project which was a complem
 - v1.2 (03.11.21) [First release with mock sample and dumpObj](https://github.com/sosie-js/python-dia-mock-plugin/releases/tag/v1.2) . 
 Limitations: it can not create dia objects and dia.py is still monolitic
 
-- v1.3 Add documentation website for python-dia 1.0.0 and this page to integrate this as the mock plugin for python dia 2.0 (comming very soon), so I changed the origin of the repos to here and mocked dia.register_action with "About DiaMock" 
+- v1.3 (15.11.21) Add documentation website for python-dia 1.0.0 and this page to integrate this as the mock plugin for python dia 2.0 (comming very soon), so I changed the origin of the repos to here and mocked dia.register_action with "About DiaMock" 
 
 
 ## Installation 
