@@ -1,4 +1,4 @@
-# the Mock Plugin
+# The Mock Plugin for Python Dia 
 
 Goal is to simulate dia core without dia..to avoid open/close dia each time you change your python code to see the results. This can be achieved only if we have a good understanding of dia api. Making python working under Dia is not straightforward because visibility of the documentation and code sample need a deep investigation to gather the pieces of the puzzle. I have
 aready generated diagram with dia python having also mocked dia-python.
