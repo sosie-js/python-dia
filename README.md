@@ -1,4 +1,10 @@
-# python-dia
+# <img src="icons/DiaPython.png" alt="logo" width="32"> python-dia
+
+
+[![Python](https://img.shields.io/badge/Python%20-any-blue)](https://www.python.org/)
+[![GTK](https://img.shields.io/badge/Gtk%20-any-blue)](https://www.gtk.org/)
+[![OS](https://img.shields.io/badge/os-Linux-orange.svg)](https://www.ubuntu.com/download/desktop)
+
 
 A library for producing and manipulating
 [Dia diagrams](http://dia-installer.de/) files.
