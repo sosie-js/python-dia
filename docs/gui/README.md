@@ -35,7 +35,7 @@ callback=help_about_callback #handler when action menuitem is clicked
 
 #and the registration
 dia.register_action (menuitem_label, menuitem_tooltip, 
-                     "/DisplayMenu/"+menu_name+"/"+menuitem_name+", 
+                     "/DisplayMenu/"+menu_name+"/"+menuitem_name, 
                      callback)
 
 ```
