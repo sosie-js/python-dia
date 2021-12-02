@@ -32,7 +32,7 @@ git clone https://github.com/sosie-js/python-dia-gui-plugin gui
 cd gui/dia_app
 ```
 
-3. Add your action into the main() body in the `dia_app.py` script
+3. Add your action into the main() body in the dia_app.py script
 
 ```python
 
