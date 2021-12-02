@@ -1,6 +1,10 @@
 # Gui plugin for Python Dia 
 
-Best Gui compagnon for the dia mocking plugin (and my first python Gtk app).
+Best Gui compagnon for the [dia mocking plugin](https://github.com/sosie-js/python-dia-mock-plugin) (and my first python Gtk app).
+
+## Environnement Dual Python2/3
+
+![image](https://user-images.githubusercontent.com/70700670/144463229-4f2a4c7b-7aff-47e4-8576-53c1ce4451dc.png)
 
 ## Limitations
 
@@ -42,4 +46,5 @@ dia.register_action (menuitem_label, menuitem_tooltip,
 ```bash
 source run_python2.sh or source run_python3.sh 
 ```
+
 
