@@ -2,9 +2,16 @@
 
 Best Gui compagnon for the [dia mocking plugin](https://github.com/sosie-js/python-dia-mock-plugin) (and my first python Gtk app).
 
-## Environnement Dual Python2/3
+## Environnement Dual 
 
-![image](https://user-images.githubusercontent.com/70700670/144463229-4f2a4c7b-7aff-47e4-8576-53c1ce4451dc.png)
+### Python2
+
+![image](https://user-images.githubusercontent.com/70700670/144469324-1a5d414d-706b-4eb8-a0f5-3d48994e5497.png)
+
+### Python3
+
+![image](https://user-images.githubusercontent.com/70700670/144469714-509d10f1-25e7-4093-8497-a17071ba8e31.png)
+
 
 ## Limitations
 
