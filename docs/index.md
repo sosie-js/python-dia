@@ -65,4 +65,7 @@ and voilà, that's all folks!
 - [Mock](https://sosie-js.github.io/python-dia/mock) simulates dia core without dia..to avoid
 op/close dia each time you change your python code to see the results.
 
+- [Gui](https://sosie-js.github.io/python-dia/gui) the graphical user interface for the Mock plugin
+which bring mainly dia.register_action to trigger action from menu mocking the dia interface.
+
 
