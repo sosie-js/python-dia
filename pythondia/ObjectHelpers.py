@@ -258,7 +258,7 @@ class DiaObjectypeHelper:
             del self.object
 
 
-def DiaObjectFactoryHelper(typename="",name="",cx=0, cy=0) ->  (str, DiaObjectypeHelper) : 
+def DiaObjectFactoryHelper(typename="",name="",cx=0, cy=0)  :  # ->  (str, DiaObjectypeHelper)
 #---------------------------------------------------------------------------------------------------------------------------------------------------
 
     otypes = dia.registered_types()
