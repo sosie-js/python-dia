@@ -17,7 +17,10 @@ Thus, you have to use the dia api to run the meaning on each code change,
 meaning you will have to close , open dia and watch errors on console to fix the 
 script. Invalid scripts will not be accessible from dia app.
 
-* For now, only objects UML Class and Database Table are supported
+## History
+
+1.0.0 - Dynamic loader for dia objects which bring python2/3 compatibility as well!
+0.7.2 - For now, only objects UML Class and Database Table are supported
 
 ## Contributing
 

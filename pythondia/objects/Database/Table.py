@@ -1,5 +1,5 @@
 """
-  pydia: Table.py - 2021.09
+  pydia: Table.py - 2021.11
   ================================================
 
   Sheet: Database
@@ -40,6 +40,7 @@ class DIA_Database_Table():
         error, dot=DiaObjectFactoryHelper("Database - Table", name=name, cx=cx, cy=cy)
         self.error=error
         self.dot=dot
+        print(error)
         
     def add_attribute(self,name,type,value,comment="",primary=0,nullable=0,unique=0) :
     #------------------------------------------------------------------------------------------------------------------------------------
@@ -67,11 +68,12 @@ class DIA_Database_Table():
         
         attribute=Database_TableAttributeHelper(a_name, a_type,a_default,comment=a_comment, primary=a_primary,nullable=a_nullable,unique=a_unique)
 
-        
+
         self.dot.attributes.append(attribute)
         return attribute
         
-    def  handler(self,row): #NOTE: self is DIA_CSV_parser after relocation
+    @classmethod
+    def  handler(self,cls,row): #NOTE: cls is DIA_CSV_parser after relocation
     #-----------------------------------    
         import re
         (c_name,p_name,p_type,p_value,p_desc) = row
@@ -96,7 +98,7 @@ class DIA_Database_Table():
                 errors.append(error)
             else :
                 dot.set_property("comment",c_desc)
-                self.objects["O"+str(len(self.objects)+1)] = dtype
+                cls.objects["O"+str(len(cls.objects)+1)] = dtype
         else:
             to=c_name.strip()   
             a_name=p_name.strip()
@@ -115,14 +117,14 @@ class DIA_Database_Table():
                             # regexp='\((\s*),(\s*),(\s*),(\d),(\d),(\d),(\s*)\)'
                             #[name, type, comment, primary, nullable, unique, value]=[t(s) for t,s in zip((str,str, str,int,int, int, str),re.search(regexp,a_value).groups())]
                             [name, type, comment, primary, nullable, unique, value]=attribute
-                            self.last_object().add_attribute(name,type,value,comment=comment,primary=primary,nullable=nullable,unique=unique) 
+                            cls.last_object().add_attribute(name,type,value,comment=comment,primary=primary,nullable=nullable,unique=unique) 
                     except BaseException as e:
                         print("Cannot match Regexp "+regexp)
                         print("on value: "+a_value)
                         raise(e)
                    
             else:
-                self.last_object().set_property(a_name,a_value, a_type)
+                cls.last_object().set_property(a_name,a_value, a_type)
    
 
     def set_property(self, name, value, type=''):

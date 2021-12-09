@@ -1,3 +1,15 @@
+"""
+  pydia: ObjectHelpers.py - 2021.11
+  ================================================
+  
+  Helpers to generate dia objects, it is mostly the gathering of Hans Breuer
+  python2-3 dia work in one point, more human friendly  using 
+  the entry point:        DiaObjectFactoryHelper taht is a DiaObjectypeHelper wrapper
+  
+  Note: Experimental, will be obsolete if we found a way to use libdia /pydia libraries
+  Author: SoSie@sos-productions.com
+  License: LGPL
+"""
 
 
 import _once
@@ -5,6 +17,8 @@ _once.imported['DiaObjectFactoryHelper']= None
 import pprint
 import inspect
 
+import sys
+python2 = (sys.version_info[0] == 2)
 
 def dia_debug_props_cb_as_csv (data, flags) :
     for layer in data.layers :
@@ -134,21 +148,25 @@ class DiaObjectypeHelper:
 
     def __init__(self,st,name="",cx=0, cy=0):
     #=========================
-     
+       
         self.st= st
         self.name = name
         self.pool_to_flush = [] 
+        dia = _once.imported['dia']
         otypes = dia.registered_types()
-  
+      
         if st in otypes: # otypes.has_key(st) :
-            o_real, h5, h6 = dia.get_object_type(st).create(cx,cy)
+            #print("DiaObjectypeHelper:dia.get_object_type("+st+").create(cx,cy)")
+            otype=dia.get_object_type(st)
+            #print("otype definition_found",otype)
+            o_real, h5, h6 = otype.create(cx,cy)
         else :
             o_real = None
             print("Failed to create object", sp, st)
-            raise("stop in DiaObjectypeHelper")
-            
+            raise(Exception("stop in DiaObjectypeHelper"))
+        
         self.object=o_real
-    
+
         if not o_real is None :
             for p in o_real.properties.keys() :
                 #print(o_real)
@@ -170,11 +188,10 @@ class DiaObjectypeHelper:
                 name=st
             if o_real.properties.has_key("name") :
                  self.set_property("name", name)
-                 1
             self.handles=(tuple([h5,h6]),)
         
     def dump_properties(self):
-        
+        """Dump properties of the Dia object as human readable way"""    
         self.flush_changes()
         
         #dot.object.parent return None, it's buggy imho
@@ -184,11 +201,17 @@ class DiaObjectypeHelper:
         print("###########################")
         for key in self.object.properties.keys():
             property=self.object.properties[key]
-            if  property.type == "darray" and len(property.value) > 1 :
-                print("%s:%s=" % (property.name, property.type))
-                pprint.pprint(property.value)
-            else:
-                print("%s:%s=%s" % (property.name, property.type, str(property.value)))
+            try:
+                if  property.type == "darray" and len(property.value) > 1 :
+                    print("%s:%s=" % (property.name, property.type))
+                    pprint.pprint(property.value)
+                else:
+                    print("%s:%s=%s" % (property.name, property.type, str(property.value)))
+            except:
+                ## property is not a 
+                print("[?] %s" % (key))
+                pprint.pprint(property)
+                raise(Exception("ObjectHelper.dump_properties() failed to dump on "+str(property)+" , it does not seems to be a Property object as it should be!"))
                 
     def flush_changes(self):
         """
@@ -258,33 +281,33 @@ class DiaObjectypeHelper:
             del self.object
 
 
-def DiaObjectFactoryHelper(typename="",name="",cx=0, cy=0)  :  # ->  (str, DiaObjectypeHelper)
-#---------------------------------------------------------------------------------------------------------------------------------------------------
-
+def DiaObjectFactoryHelper(typename="",name="",cx=0, cy=0) :# ->  (str, DiaObjectypeHelper) : 
+    """Helper to produce dia objects according to their object type name
+        name is optional name, if property namle exissts for the dia object
+        initial position can be overriden with real cx and cy
+    """
+    dia=_once.imported['dia']
     otypes = dia.registered_types()
     keys = otypes.keys()
     sorted(keys)
     packages=get_packagesdict(keys)
     error=""
     dot=None
-    
+ 
     if typename=="" :
         error="dia_debug_show_diaobjs ended."
         print(str(len(packages))+" Dia Object Packages Available")
         for packagename, otypenames in packages.items():
              print("["+packagename+"]:"+",".join(otypenames))
     else:
-
         if " - " in typename : 
             if typename in keys:
-                #print("Found")
                 otname=typename
-               
                 try:
-                    dot=DiaObjectypeHelper(otname, name=name,cx=cx, cy=cy)
+                    dot=DiaObjectypeHelper(otname, name,cx=cx, cy=cy)
                 except Exception as e:
-                    raise(e)
-                    error="Failed to create object type "+otname + ", reason was "+str(e)
+                    #raise(e)
+                    error="pythondia.DiaObjectFactoryHelper error:Failed to create object type "+otname + ", reason was "+str(e)
                     
                 return error, dot
  
@@ -334,6 +357,7 @@ class DIA_CSV_parser:
             cname="DIA_"+self.target.replace(" - ","_")
             klass=_once.imported[cname]#globals()[cname]
             handler=klass.handler
+            #handler=getattr(klass,'handler')
         except BaseException as e:
             raise(Exception("DIA_CSV_parser: No handler for "+cname+", error was "+str(e)))
 
@@ -349,15 +373,29 @@ class DIA_CSV_parser:
                 #    continue
                 if(len(row) > 1): #1 to avoid spaced or empty lines
                     try:
-                        handler(self,row)
+                        if python2:
+                            handler(self,row)
+                        else:
+                            handler(self,row)
                     except BaseException as e:
                         print(row)
                         raise(e)
 
     def parse_data(self,data):
     #---------------------------------------------------------   
-        import io
-        stream = io.StringIO(data)
+        
+        if(python2):
+            #initial_value must be unicode or None, not str
+            #with stream = io.StringIO(data)
+            #from StringIO import StringIO
+            from io import StringIO
+            data=unicode(data)
+            stream = StringIO(data)
+        else:
+            import io
+            #from io import BytesIO
+            #stream = BytesIO(data)
+            stream=io.StringIO(data)
         self.parse_stream(stream)
         return self
     

@@ -12,7 +12,15 @@
 import _once
 _once.imported['DIA_UML_Class']= None
 if not 'DiaObjectFactoryHelper' in _once.imported.keys() :
-    from pythonDia.ObjectHelpers import DiaObjectFactoryHelper
+    import sys
+    python2 = (sys.version_info[0] == 2)
+    if python2:
+        import os
+        dirname = os.path.dirname(__file__)
+        sys.path.insert(0, os.path.join(dirname,"../.."))
+        from ObjectHelpers import DiaObjectFactoryHelper
+    else:
+        from pythondia.ObjectHelpers import DiaObjectFactoryHelper
 
 class UML_ClassOperationParamHelper:
 
@@ -117,8 +125,9 @@ class DIA_UML_Class():
         operation=UML_ClassOperationHelper(name, type, comment=comment, stereotype=stereotype, visibility=visibility, inheritance_type=inheritance_type, query=query,class_scope=class_scope)
         self.dot.operations.append(operation)
         return operation
-        
-    def  handler(self,row): #NOTE: self is DIA_CSV_parser after relocation
+    
+    @classmethod
+    def  handler(self,cls,row): #NOTE: cls is DIA_CSV_parser 
     #-----------------------------------    
         (c_name,p_name,p_type,p_value,p_desc) = row
         #print(row)
@@ -144,7 +153,7 @@ class DIA_UML_Class():
             else :
                 dot.set_property("comment",c_desc)
                 dot.set_property("stereotype",c_stereotype)
-                self.objects["O"+str(len(self.objects)+1)] = dtype
+                cls.objects["O"+str(len(cls.objects)+1)] = dtype
         else:
             to=c_name.strip()   
             a_name=p_name.strip()
@@ -158,9 +167,9 @@ class DIA_UML_Class():
             if( "(" in p_name):
                 #decode params
                 
-                self.last_object().add_operation(a_name, a_type, comment=a_comment, stereotype='', visibility=0, inheritance_type=2, query=0,class_scope=0, params=())
+                cls.last_object().add_operation(a_name, a_type, comment=a_comment, stereotype='', visibility=0, inheritance_type=2, query=0,class_scope=0, params=())
             else: #append the attribute
-                self.last_object().add_attribute(a_name,type=a_type,value=a_value,comment=a_comment,visibility=a_visibility,abstract=a_abstract,class_scope=a_class_scope)
+                cls.last_object().add_attribute(a_name,type=a_type,value=a_value,comment=a_comment,visibility=a_visibility,abstract=a_abstract,class_scope=a_class_scope)
         
         
     def flush_changes(self) :

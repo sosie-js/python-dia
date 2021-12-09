@@ -1,5 +1,5 @@
 """
-  pydia: main script - 2021.09
+  pydia: main script - 2021.12
   ================================================
   
   Note: Experimental, will be obsolete if we found a way to use libdia /pydia libraries
@@ -7,10 +7,12 @@
   License: LGPL
 """
 
-import sys 
+import os, sys 
 import logging
 import gettext
 _ = gettext.gettext
+
+python2 = (sys.version_info[0] == 2)
 
 def install_custom_log():
     logging.basicConfig(format='{asctime}: {levelname}: {message}',
@@ -22,18 +24,12 @@ def install_shared_module():
         outfile.write("#Class holder containing imports to prevent circular imports\n")
         outfile.write("imported={}")
 
-def check_versions() -> bool:
+def log_versions() : #-> bool:
     from pkg_resources import get_distribution
     from platform import python_version
-
-    failed = False
-
-    if sys.version_info < (3, 6, 0, 'final', 0):
-        logging.warning('pythonDia is not tested on Python versions prior to 3.6, but you have {} {}. Use at your own risk.'
-                        .format(python_version(), sys.version_info.releaselevel))
-        failed = True
-        
-    return failed
+    logging.info('pythonDia starts with Python {} {}.'
+                    .format(python_version(), sys.version_info.releaselevel))
+    
     
 import json
 
@@ -156,7 +152,7 @@ import inspect
  
 install_custom_log()
  
-check_versions() 
+log_versions() 
 
 install_shared_module()
  
@@ -184,17 +180,96 @@ else:
                       
     _once.imported['dia']= dia
     
-    #==== SoS extension ====
-    
-    # Core (DON'T TOUCH THESE TWO LINES!)
-    from pythondia.objects.UML.Class import DIA_UML_Class
-    from pythondia.ObjectHelpers import DiaObjectFactoryHelper
-   
-    # Extras
-    from pythondia.objects.Database.Table import DIA_Database_Table
-   
+    #
+    # PYTHONDIA
+    #
+
+    try:
+      
+        import pythondia
+
+    except ModuleNotFoundError:
+        
+        # !NOTE: When python3 built-in is used, ie python is launched in dia, 
+        # import modules installed with 'sudo pip3 install <module>' 
+        # in /usr/local/lib/python3.x/dist-packages/ are ignored
+        #we have to add their module dir <module>-py3.x.egg
+        # in the sys path to make the import working
+        
+        def find_module_path(module_name):
+            sys_path = sys.path[:]
+            last_module_path=""
+            if python2:
+                repos="dist-packages"
+            else:
+                repos="site-packages"
+            for path in sys_path:
+                if repos in path :
+                    if os.path.isdir(path) :
+                        for module_path in sorted(os.listdir(path)):
+                            #print(module_path)
+                            if module_name in module_path:
+                                last_module_path=path+"/"+module_path
+                                
+            return last_module_path
+            
+        #find the module pythondia            
+        pythondia_path=find_module_path('pythondia')
+        
+        #in dev mode, we have to resolve the link given 
+        #at the first line of the pythondialinkfile
+        if ".egg-link" in  pythondia_path:
+            with open(pythondia_path, 'r') as pythondialinkfile:
+                pythondia_path=pythondialinkfile.readline().strip()
+        
+        #add the module pythondia in the system path 
+        print("module recovery found pythondia in "+pythondia_path)
+        sys.path.insert(0, pythondia_path)
+        
+        import pythondia
+
+    # Objects auto-import
+    #from  pythondia import objects
+
+    try: #python2
+        from ObjectHelpers import DiaObjectFactoryHelper
+    except: #python3
+        from pythondia.ObjectHelpers import DiaObjectFactoryHelper
+
+    #get the recursive list of object class names
+    #get first the list of object class names
+    objnames=dir(pythondia)
+
+    #exclude the two specials, whose order has to be handled differently 
+    objnames.remove("DiaObjectFactoryHelper") #already included above as first
+    objnames.remove("DIA_CSV_parser") #will be the last  to be included see below 
+    objnames=[entry for entry in objnames if "DIA_"in entry]
+
+    for objname in objnames:
+        print("Import "+objname)
+        #obj=_once.imported[objname]
+        obj=getattr(pythondia,objname)
+        
+        print(obj)
+        # !NOTE: locals()[objname]=obj does not work in python2, we have to hook..
+        # fortunately there is someone who knows how to handle it
+        # https://stackoverflow.com/questions/8028708/dynamically-set-local-variable
+        #   code_text = objname+" = obj" 
+        #   filename = ''
+        #  code_chunk = compile( code_text, filename, 'exec' )
+        #  exec(code_chunk) 
+        # WHEREAS 
+        #locals()[objname]=obj fails to import DIA object classes 
+        # ie DIA_* on python3 buitly-in
+        # the only way is to switch to globals
+        globals()[objname]=obj 
+
     # Should be the last
-    from pythondia.ObjectHelpers import DIA_CSV_parser
+
+    try: #python2
+        from ObjectHelpers import DIA_CSV_parser 
+    except:
+        from pythondia.ObjectHelpers import DIA_CSV_parser
     
     #=================
 
