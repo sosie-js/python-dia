@@ -1,4 +1,4 @@
-# <img src="icons/pythondia.png" alt="logo" width="32"> python-dia
+# <img src="https://github.com/sosie-js/python-dia/raw/main/icons/pythondia.png" alt="logo" width="32"> python-dia
 
 
 [![Python](https://img.shields.io/badge/Python%20-any-blue)](https://www.python.org/)
