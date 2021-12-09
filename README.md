@@ -19,8 +19,9 @@ script. Invalid scripts will not be accessible from dia app.
 
 ## History
 
-1.0.0 - Dynamic loader for dia objects which bring python2/3 compatibility as well!
-0.7.2 - For now, only objects UML Class and Database Table are supported
+**1.0.0** - Dynamic loader for dia objects which bring python2/3 compatibility as well!
+
+**0.7.1** - For now, only objects UML Class and Database Table are supported
 
 ## Contributing
 
