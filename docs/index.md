@@ -15,9 +15,8 @@ I am not the [only one that need to produce diagrams without Gui](https://gitlab
 ![Demo live](https://raw.githubusercontent.com/sosie-js/python-dia/main/pythondia_demo.gif)
 
 
-1. Simply put the tests/diapyhton.py in your ~/.dia/python and proceed the following installatiob
-if you want to run the script in a dual python 2-3 environment when dia is launched. You should see
-the debug menu appear with this entry:
+1. Simply put the tests/diapython.py in your ~/.dia/python/ directory and proceed the installation
+described after if you want to run the script in a dual python 2-3 environment when dia is launched. You should see the debug menu appear with this entry:
 
 ![image](https://user-images.githubusercontent.com/70700670/145476191-9c7864ea-13e7-44ea-8244-c1c89df0b915.png)
 
