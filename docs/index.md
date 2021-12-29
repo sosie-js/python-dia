@@ -15,13 +15,6 @@ I am not the [only one that need to produce diagrams without Gui](https://gitlab
 ![Demo live](https://raw.githubusercontent.com/sosie-js/python-dia/main/pythondia_demo.gif)
 
 
-1. Simply put the tests/diapython.py in your ~/.dia/python/ directory and proceed the installation
-described after if you want to run the script in a dual python 2-3 environment when dia is launched. You should see the debug menu appear with this entry:
-
-![image](https://user-images.githubusercontent.com/70700670/145476191-9c7864ea-13e7-44ea-8244-c1c89df0b915.png)
-
-2. click on it to have your pythondia script executed!
-
 ## Installation 
 
 Most of the linux provides dia with python still 2.7 which support ended on janary 2020. 
@@ -75,4 +68,5 @@ op/close dia each time you change your python code to see the results.
 - [Gui](https://sosie-js.github.io/python-dia/gui) the graphical user interface for the Mock plugin
 which bring mainly dia.register_action to trigger action from menu mocking the dia interface.
 
+- [Core](https://sosie-js.github.io/python-dia/core) the core files to create dia objects to be used by the mock plugin
 
