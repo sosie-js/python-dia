@@ -2,9 +2,12 @@
 [submodule "pythondia/plug-ins/core"]
 	path = pythondia/plug-ins/core
 	url = https://github.com/sosie-js/python-dia-core-plugin
+	branch = main
 [submodule "pythondia/plug-ins/mock"]
 	path = pythondia/plug-ins/mock
 	url = https://github.com/sosie-js/python-dia-mock-plugin
+	branch = v2.0.0
 [submodule "pythondia/plug-ins/gui"]
 	path = pythondia/plug-ins/gui
 	url = https://github.com/sosie-js/python-dia-gui-plugin
+	branch = main
