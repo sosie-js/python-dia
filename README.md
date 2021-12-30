@@ -20,7 +20,7 @@ git clone --recurse-submodule https://github.com/sosie-js/python-dia pythondia-2
 
 ## History
 
-**2.0.0** - Support dia core and libs with mock plugin and core plugin auto-installed ! 
+**2.0.0** - Support dia core and libs with mock plugin v2.0 and core plugin auto-installed ! 
 
 **1.0.0** - Dynamic loader for dia objects which bring python2/3 compatibility as well!
 
