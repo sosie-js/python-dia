@@ -16,6 +16,9 @@ Limitations: it can not create dia objects and dia.py is still monolitic
 
 - v1.3 (15.11.21) Add documentation website for python-dia 1.0.0 and this page to integrate this as the mock plugin for python dia 2.0 (coming very soon), so I changed the origin of the repos to here and mocked dia.register_action with "About DiaMock" 
 
+- v2.0 (30.12.21) Add Core and libs support. This is the first version non monolitic trying to
+reproduce the C files inclusion and reusing the core files produced by the core plugin to create dia
+objects with their default values.
 
 ## Installation 
 
