@@ -1,11 +1,1 @@
-[submodule "core"]
-	path = pythondia/plug-ins/core
-	url = https://github.com/sosie-js/python-dia-core-plugin
-	branch = main
 
-[submodule "mock"]
-	path = pythondia/plug-ins/mock
-	url = https://github.com/sosie-js/python-dia-mock-plugin
-	branch = v2.0
-[submodule]
-	core = main
