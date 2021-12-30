@@ -10,14 +10,17 @@ A library for producing and manipulating
 [Dia diagrams](http://dia-installer.de/) files.
 [More on my website](https://sosie-js.github.io/python-dia/)
 
-## Limitations
+## Installation
 
-* This version does provide pythondia access only to objects. 
-Thus, you have to use the dia api to run the meaning on each code change,
-meaning you will have to close , open dia and watch errors on console to fix the 
-script. Invalid scripts will not be accessible from dia app.
+Since 2.0.0, all the plugins are seen as submodules simplifying the installation to :
+
+```shell
+git clone --recurse-submodule https://github.com/sosie-js/python-dia pythondia-2.0.0/ -b v2.0.0
+```
 
 ## History
+
+**2.0.0** - Support dia core and libs with mock plugin and core plugin auto-installed ! 
 
 **1.0.0** - Dynamic loader for dia objects which bring python2/3 compatibility as well!
 
