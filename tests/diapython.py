@@ -1,6 +1,8 @@
 """
-  pydia: main script - 2021.12
+  pydia: main script - 2022.01
   ================================================
+  
+  V2.0 alpha support dia & svg renderer (miss object parsing)
   
   Note: Experimental, will be obsolete if we found a way to use libdia /pydia libraries
   Author: SoSie@sos-productions.com
@@ -65,6 +67,7 @@ def dia_debug_show_diaobjs (data, flags) :
         diagram = dia.new("diagdebug.dia")
         data = diagram.data
     layer = data.active_layer
+    print("LAYER",layer)
     
     #Case 1 : Non Wrapped Objectypes in a class_
     #------------------------------------------------------------------
@@ -145,6 +148,15 @@ def dia_debug_show_diaobjs (data, flags) :
             diagram.display()
             diagram.flush()
         #dot.destroy()
+        
+        #Export
+        dia.save(data, "Foo.dia")
+        try:
+            dia.save(data, "Foo.svg")
+        except Exception as e:
+            print("TODO save('*.svg'): Provide layer.extents and data.extents support\nWithout it renderer will fail like this:")
+            raise(e)
+            
     return data
 
 
@@ -163,115 +175,167 @@ def onDiaLaunched():
 
 import _once
 
+#if __name__ == '__main__' or not onDiaLaunched():
+   
+#    print("This free version does not have the dia core, you can only trigger from dia, sorry")
+
+##else:
+def whoami():
+    stack=inspect.stack()
+    return json_dump(stack[-1][1])
+
+if("dia" in globals()):
+    print("DIA(G)"+__name__ )
+else:
+    print("----------\nDIA"+__name__+":"+whoami()+"="+str(onDiaLaunched())+"\n----------")
+    import dia
+                  
+## SAVE / EXPORT ##########################
+
+#Load your import/export reenderers here
+from diastddia import *  #to produce .dia on save - support on only "Standard - " dia objects
+from diasvg import *      #to produce .svg, .svgz on save  
+
+def save (data, filename):
+
+        '''Minimalistic version, I don't know how to parse dia object 
+        and bridge it to draw_ * . Seems to be made in _DiaPyRenderer  aka pydia-render.c  '''
+    
+        #  extract the extension
+        extension=filename[filename.find('.')+1:]
+        
+        # fetch the registered export renderer matching the extension
+        exports=dia._dia._export
+        
+        found= False
+        export_renderers=exports.values()
+        for export_renderer in export_renderers:
+            extension_renderer=export_renderer[0][0]
+            if extension_renderer == extension:
+                renderer=export_renderer[0][1]
+                found=  True
+        
+        if found:
+            print("RENDER TO "+filename)
+            renderer.begin_render(data, filename)
+            #============= ALPHA ==========================
+            #!FIXME : Render from object shape in .dia/shapes or /usr/share/dia/shapes
+            # or converting python/plug-ins/pythondia.c to python 
+            # or reusing umldoc project?
+            #============================================
+            renderer.end_render()
+        else:
+            print("save(): Sorry no export renderer found for extension ."+extension)
+    
+#overrides with the good implementation this time
+setattr(dia,"save",save)                  
+              
+## END OF SAVE / EXPORT
+
+_once.imported['dia']= dia
+
+#
+# PYTHONDIA
+#
+
+try:
+  
+    import pythondia
+
+except ModuleNotFoundError:
+    
+    # !NOTE: When python3 built-in is used, ie python is launched in dia, 
+    # import modules installed with 'sudo pip3 install <module>' 
+    # in /usr/local/lib/python3.x/dist-packages/ are ignored
+    #we have to add their module dir <module>-py3.x.egg
+    # in the sys path to make the import working
+    
+    def find_module_path(module_name):
+        sys_path = sys.path[:]
+        last_module_path=""
+        if python2:
+            repos="dist-packages"
+        else:
+            repos="site-packages"
+        for path in sys_path:
+            if repos in path :
+                if os.path.isdir(path) :
+                    for module_path in sorted(os.listdir(path)):
+                        #print(module_path)
+                        if module_name in module_path:
+                            last_module_path=path+"/"+module_path
+                            
+        return last_module_path
+        
+    #find the module pythondia            
+    pythondia_path=find_module_path('pythondia')
+    
+    #in dev mode, we have to resolve the link given 
+    #at the first line of the pythondialinkfile
+    if ".egg-link" in  pythondia_path:
+        with open(pythondia_path, 'r') as pythondialinkfile:
+            pythondia_path=pythondialinkfile.readline().strip()
+    
+    #add the module pythondia in the system path 
+    print("module recovery found pythondia in "+pythondia_path)
+    sys.path.insert(0, pythondia_path)
+    
+    import pythondia
+
+# Objects auto-import
+#from  pythondia import objects
+
+try: #python2
+    from ObjectHelpers import DiaObjectFactoryHelper
+except: #python3
+    from pythondia.ObjectHelpers import DiaObjectFactoryHelper
+
+#get the recursive list of object class names
+#get first the list of object class names
+objnames=dir(pythondia)
+
+#exclude the two specials, whose order has to be handled differently 
+objnames.remove("DiaObjectFactoryHelper") #already included above as first
+objnames.remove("DIA_CSV_parser") #will be the last  to be included see below 
+objnames=[entry for entry in objnames if "DIA_"in entry]
+
+for objname in objnames:
+    print("Import "+objname)
+    #obj=_once.imported[objname]
+    obj=getattr(pythondia,objname)
+    
+    print(obj)
+    # !NOTE: locals()[objname]=obj does not work in python2, we have to hook..
+    # fortunately there is someone who knows how to handle it
+    # https://stackoverflow.com/questions/8028708/dynamically-set-local-variable
+    #   code_text = objname+" = obj" 
+    #   filename = ''
+    #  code_chunk = compile( code_text, filename, 'exec' )
+    #  exec(code_chunk) 
+    # WHEREAS 
+    #locals()[objname]=obj fails to import DIA object classes 
+    # ie DIA_* on python3 buitly-in
+    # the only way is to switch to globals
+    globals()[objname]=obj 
+
+# Should be the last
+
+try: #python2
+    from ObjectHelpers import DIA_CSV_parser 
+except:
+    from pythondia.ObjectHelpers import DIA_CSV_parser
+
+#=================
+
 if __name__ == '__main__' or not onDiaLaunched():
    
-    print("This free version does not have the dia core, you can only trigger from dia, sorry")
+    diagram = dia.new("diagdebug.dia")
+    data = diagram.data
+    data.add_layer("Background")
+    data.set_active_layer(data.layers[0])
+    dia_debug_show_diaobjs(data,None)
 
 else:
-    def whoami():
-        stack=inspect.stack()
-        return json_dump(stack[-1][1])
-    
-    if("dia" in globals()):
-        print("DIA(G)"+__name__ )
-    else:
-        print("----------\nDIA"+__name__+":"+whoami()+"="+str(onDiaLaunched())+"\n----------")
-        import dia
-                      
-    _once.imported['dia']= dia
-    
-    #
-    # PYTHONDIA
-    #
-
-    try:
-      
-        import pythondia
-
-    except ModuleNotFoundError:
-        
-        # !NOTE: When python3 built-in is used, ie python is launched in dia, 
-        # import modules installed with 'sudo pip3 install <module>' 
-        # in /usr/local/lib/python3.x/dist-packages/ are ignored
-        #we have to add their module dir <module>-py3.x.egg
-        # in the sys path to make the import working
-        
-        def find_module_path(module_name):
-            sys_path = sys.path[:]
-            last_module_path=""
-            if python2:
-                repos="dist-packages"
-            else:
-                repos="site-packages"
-            for path in sys_path:
-                if repos in path :
-                    if os.path.isdir(path) :
-                        for module_path in sorted(os.listdir(path)):
-                            #print(module_path)
-                            if module_name in module_path:
-                                last_module_path=path+"/"+module_path
-                                
-            return last_module_path
-            
-        #find the module pythondia            
-        pythondia_path=find_module_path('pythondia')
-        
-        #in dev mode, we have to resolve the link given 
-        #at the first line of the pythondialinkfile
-        if ".egg-link" in  pythondia_path:
-            with open(pythondia_path, 'r') as pythondialinkfile:
-                pythondia_path=pythondialinkfile.readline().strip()
-        
-        #add the module pythondia in the system path 
-        print("module recovery found pythondia in "+pythondia_path)
-        sys.path.insert(0, pythondia_path)
-        
-        import pythondia
-
-    # Objects auto-import
-    #from  pythondia import objects
-
-    try: #python2
-        from ObjectHelpers import DiaObjectFactoryHelper
-    except: #python3
-        from pythondia.ObjectHelpers import DiaObjectFactoryHelper
-
-    #get the recursive list of object class names
-    #get first the list of object class names
-    objnames=dir(pythondia)
-
-    #exclude the two specials, whose order has to be handled differently 
-    objnames.remove("DiaObjectFactoryHelper") #already included above as first
-    objnames.remove("DIA_CSV_parser") #will be the last  to be included see below 
-    objnames=[entry for entry in objnames if "DIA_"in entry]
-
-    for objname in objnames:
-        print("Import "+objname)
-        #obj=_once.imported[objname]
-        obj=getattr(pythondia,objname)
-        
-        print(obj)
-        # !NOTE: locals()[objname]=obj does not work in python2, we have to hook..
-        # fortunately there is someone who knows how to handle it
-        # https://stackoverflow.com/questions/8028708/dynamically-set-local-variable
-        #   code_text = objname+" = obj" 
-        #   filename = ''
-        #  code_chunk = compile( code_text, filename, 'exec' )
-        #  exec(code_chunk) 
-        # WHEREAS 
-        #locals()[objname]=obj fails to import DIA object classes 
-        # ie DIA_* on python3 buitly-in
-        # the only way is to switch to globals
-        globals()[objname]=obj 
-
-    # Should be the last
-
-    try: #python2
-        from ObjectHelpers import DIA_CSV_parser 
-    except:
-        from pythondia.ObjectHelpers import DIA_CSV_parser
-    
-    #=================
 
     dia.register_action ("DebugShowDiaObject", _("Dia _Object Factory Helper"),
                          "/DisplayMenu/Debug/DebugExtensionStart",
