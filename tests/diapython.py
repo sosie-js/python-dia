@@ -4,6 +4,9 @@
   
   V2.0 alpha support dia & svg renderer (miss object parsing)
   
+  Requires:  diasvg.py, diastddia.py
+  Doc: https://wiki.gnome.org/Apps/Dia/Python
+          https://gitlab.gnome.org/GNOME/dia/raw/master/samples/Self/PyDiaObjects.dia
   Note: Experimental, will be obsolete if we found a way to use libdia /pydia libraries
   Author: SoSie@sos-productions.com
   License: LGPL
@@ -212,18 +215,25 @@ def save (data, filename):
         for export_renderer in export_renderers:
             extension_renderer=export_renderer[0][0]
             if extension_renderer == extension:
-                renderer=export_renderer[0][1]
+                r=export_renderer[0][1]
                 found=  True
         
         if found:
+            
+            #data.render, guessing from dia/lib/diagramdata.c
             print("RENDER TO "+filename)
-            renderer.begin_render(data, filename)
-            #============= ALPHA ==========================
-            #!FIXME : Render from object shape in .dia/shapes or /usr/share/dia/shapes
-            # or converting python/plug-ins/pythondia.c to python 
-            # or reusing umldoc project?
+            r.begin_render(data, filename)
+        
+            for layer in data.layers:
+                if hasattr(r, "draw_layer") and callable(r.draw_layer):
+                    update=None #DiaRectangle
+                    active = (layer == data.active_layer)
+                    r. draw_layer (layer, active, update)
+                else:
+                   layer.render(r)
+            
             #============================================
-            renderer.end_render()
+            r.end_render()
         else:
             print("save(): Sorry no export renderer found for extension ."+extension)
     
